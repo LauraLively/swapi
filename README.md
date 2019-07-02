@@ -14,7 +14,7 @@ npm start
 
 --------------------------
 
-At present all the data from SWAPI.com is being pulled and displayed in the console.
+At present all the data from SWAPI.co is being pulled and displayed in the console.
 I need to get the data rendered on the pages. And fix the function to extract the names of the planet residents.
 
 
