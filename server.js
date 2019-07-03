@@ -215,28 +215,40 @@ function progressCallback(planets) {
 //   })
   // .catch(console.error);
 
+// app.get('/planetresidents', (req, res, next) => {
+//   getStarWarsPlanets(progressCallback)
+//     .then((data) => {
+//       console.log('data', data[1])
+//       let planets = data.results;
+//       getPlanets(planets)
+//         .then(p => {
+//           res.render('pages/planetresidents', {
+//             data: JSON.stringify(p)
+//           });
+//         })
+//         .then((data) => {
+//           res.render('pages/planetresidents', {
+//             data: planets
+//           });
+//         })
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+// });
+
 app.get('/planetresidents', (req, res, next) => {
   getStarWarsPlanets(progressCallback)
     .then((data) => {
-      console.log('data', data[])
-      let planets = data.results;
-      getPlanets(planets)
-        .then(p => {
-          res.render('pages/planetresidents', {
-            data: JSON.stringify(p)
-          });
-        })
-        .then((data) => {
-          res.render('pages/planetresidents', {
-            data: planets
-          });
-        })
+      res.render('pages/planetresidents', {
+        data: data
+      })
+      console.log('planetdata', data[1])
     })
     .catch((err) => {
       console.log(err);
     })
 });
-
 
 //---------------------------------------
 // set up port listener

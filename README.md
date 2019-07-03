@@ -14,8 +14,9 @@ npm start
 
 --------------------------
 
-At present all the data from SWAPI.co is being pulled and displayed in the console.
-I need to get the data rendered on the pages. And fix the function to extract the names of the planet residents.
+Characters page displays all 81 Characters and their weight and height. They can then be sorted alphabetically 
+by name, by weight and by height. 
 
+The Planetresidents page displays all 61 planets with the residents //TODO extract names from the url instead of displaying the url.
 
 
