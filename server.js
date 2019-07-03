@@ -55,6 +55,7 @@ app.get('/', function (req, res) {
 
 //https://stackoverflow.com/questions/49129245/javascript-using-fetch-and-pagination-recursive
 function getStarWarsPeople(progress, url = 'https://swapi.co/api/people', people = []) {
+  console.log("test")
   return new Promise((resolve, reject) => fetch(url)
     .then(response => {
       console.log('url', url)
@@ -79,38 +80,38 @@ function progressCallback(people) {
   console.log(`${people.length} loaded`);
 };
 
-getStarWarsPeople(progressCallback)
-  .then(people => {
-    // all people have been loaded
-    console.log(people.map(p => p.name));
-  })
-  .catch(console.error);
+// getStarWarsPeople(progressCallback)
+//   .then(people => {
+//     // all people have been loaded
+//     console.log(people.map(p => p.name));
+//   })
+//   .catch(console.error);
 
 
 
-app.get('/characters', (req, res) => {
+app.get('/characters', async (req, res) => {
+  console.log("test2")
   //https://stackoverflow.com/questions/6912584/how-to-get-get-query-string-variables-in-express-js-on-node-js
-  getStarWarsPeople(progressCallback)
+  await getStarWarsPeople(progressCallback)
     .then((data) => {
       const parsedQuery = req.query.sort;
-      const results = data.results;
       if (parsedQuery === 'name') {
-        results.sort(function (a, b) {
+        data.sort(function (a, b) {
           return sortStrings(a.name, b.name);
         })
       }
       if (parsedQuery === 'mass') {
-        results.sort(function (a, b) {
+        data.sort(function (a, b) {
           return sortNumber(a.mass, b.mass);
         })
       }
       if (parsedQuery === 'height') {
-        results.sort(function (a, b) {
+        data.sort(function (a, b) {
           return sortNumber(a.height, b.height);
         })
-      }
+      }console.log("data", data[0])
       res.render('pages/characters', {
-        data: results
+        data: data
       });
       sortByName = false;
     })
@@ -207,16 +208,17 @@ function progressCallback(planets) {
   console.log(`${planets.length} loaded`);
 };
 
-getStarWarsPlanets(progressCallback)
-  .then(planets => {
-    // all people have been loaded
-    console.log(planets);
-  })
-  .catch(console.error);
+// getStarWarsPlanets(progressCallback)
+//   .then(planets => {
+//     // all people have been loaded
+//     console.log(planets);
+//   })
+  // .catch(console.error);
 
 app.get('/planetresidents', (req, res, next) => {
   getStarWarsPlanets(progressCallback)
     .then((data) => {
+      console.log('data', data[])
       let planets = data.results;
       getPlanets(planets)
         .then(p => {
@@ -226,7 +228,7 @@ app.get('/planetresidents', (req, res, next) => {
         })
         .then((data) => {
           res.render('pages/planetresidents', {
-            data: data.results
+            data: planets
           });
         })
     })
