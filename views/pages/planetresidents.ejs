@@ -10,16 +10,17 @@
     </header>
     <main>
         <div class="jumbotron">
-            <h1>Star Wars Planet Residents</h1>
-            <table>
+            <h1 style="font-size: x-large">Star Wars Planet Residents</h1>
+            <table class="table">
                 <% data.forEach(function(planet) { %>
               <tr>
                 <td><%= planet.name %></td>
-                <td><%= planet.residents %></td>
+                <td ><%= planet.residents %> </td>
               </tr>
               <% }); %>
 
             </table>
+            <% data %>
         </div>
     </main>
     <footer>

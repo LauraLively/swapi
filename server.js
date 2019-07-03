@@ -162,19 +162,18 @@ function extractNames(param) {
   })
 };
 
-function getPlanets(planets) {
+function setResidentNames(planets) {
   const result = {};
   return Promise.all(
     planets.map(planet => {
-      const planetProcessed = planet;
-      return extractNames(planetProcessed.residents)
+      return extractNames(planet.residents)
         .then(residentNames => {
-          result[planet.name] = residentNames
+          planet.residents = residentNames
         })
     })
   )
     .then(() => {
-      return result;
+      return planets;
     })
 };
 
@@ -191,14 +190,16 @@ function getStarWarsPlanets(progress, url = 'https://swapi.co/api/planets', plan
         throw `${response.status}: ${response.statusText}`;
       }
       response.json().then(data => {
-        planets = planets.concat(data.results);
+        setResidentNames(data.results).then(updatedPlanets => {
+          planets = planets.concat(updatedPlanets);
 
-        if (data.next) {
-          progress && progress(planets);
-          getStarWarsPlanets(progress, data.next, planets).then(resolve).catch(reject)
-        } else {
-          resolve(planets);
-        }
+          if (data.next) {
+            progress && progress(planets);
+            getStarWarsPlanets(progress, data.next, planets).then(resolve).catch(reject)
+          } else {
+            resolve(planets);
+          }
+        });
       }).catch(reject);
     }).catch(reject));
 };
@@ -244,6 +245,17 @@ app.get('/planetresidents', (req, res, next) => {
         data: data
       })
       console.log('planetdata', data[1])
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+});
+
+app.get('/pr', (req, res, next) => {
+  getStarWarsPlanets(progressCallback)
+    .then((data) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(data, null, 3));
     })
     .catch((err) => {
       console.log(err);
